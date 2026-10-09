@@ -1,0 +1,32 @@
+meta {
+  name: Reject quantity above stock
+  type: http
+  seq: 24
+}
+
+post {
+  url: {{baseUrl}}/orders
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{accessToken}}
+}
+
+body:json {
+  {"itemId":1,"quantity":{{overstockQuantity}}}
+}
+
+script:pre-request {
+  bru.setEnvVar("expectedStock1", Number(bru.getEnvVar("stock1")));
+  bru.setEnvVar("expectedStock2", Number(bru.getEnvVar("stock2")));
+  bru.setEnvVar("overstockQuantity", Math.floor(Number(bru.getEnvVar("stock1"))) + 1);
+}
+
+tests {
+  test("An order exceeding available stock is rejected", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

@@ -1,0 +1,30 @@
+meta {
+  name: Reject missing token
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/orders
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {"itemId":1,"quantity":1}
+}
+
+script:pre-request {
+  bru.setEnvVar("expectedStock1", Number(bru.getEnvVar("stock1")));
+  bru.setEnvVar("expectedStock2", Number(bru.getEnvVar("stock2")));
+}
+
+tests {
+  test("Orders require authentication", function () {
+    expect(res.getStatus()).to.equal(401);
+  });
+}

@@ -1,0 +1,41 @@
+meta {
+  name: Login and save token
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {"username":"student","password":"hungry"}
+}
+
+script:pre-request {
+  bru.setEnvVar("accessToken", "");
+  bru.setEnvVar("orderId", "");
+}
+
+script:post-response {
+  if (res.getStatus() === 200 && typeof res.getBody().accessToken === "string") {
+    bru.setEnvVar("accessToken", res.getBody().accessToken);
+  }
+}
+
+tests {
+  test("Valid login succeeds", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("Login returns a token and its lifetime", function () {
+    expect(res.getBody().accessToken).to.be.a("string").and.not.empty;
+    expect(res.getBody().expiresIn).to.equal(3600);
+    expect(bru.getEnvVar("accessToken")).to.equal(res.getBody().accessToken);
+  });
+}

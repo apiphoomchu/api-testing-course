@@ -1,0 +1,24 @@
+meta {
+  name: Reject nonexistent order
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/orders/ORD-does-not-exist
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{accessToken}}
+}
+
+tests {
+  test("Missing order returns 404", function () {
+    expect(res.getStatus()).to.equal(404);
+  });
+  test("Missing order has an error message", function () {
+    expect(res.getBody().error).to.equal("Order not found");
+  });
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Read initial menu
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/menu
+  body: none
+  auth: none
+}
+
+script:post-response {
+  if (res.getStatus() === 200 && Array.isArray(res.getBody())) {
+    for (const item of res.getBody()) {
+      bru.setEnvVar("stock" + item.id, item.stock);
+      bru.setEnvVar("price" + item.id, item.price);
+    }
+  }
+}
+
+tests {
+  test("Menu is public", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("The run starts with the original menu and fresh stock", function () {
+    expect(res.getBody()).to.be.an("array").with.lengthOf(2);
+    expect(res.getBody().find(item => item.id === 1)).to.deep.equal({id:1, name:"Tom Yum Noodles", price:50, stock:2});
+    expect(res.getBody().find(item => item.id === 2)).to.deep.equal({id:2, name:"Fried Rice", price:45, stock:1});
+  });
+}

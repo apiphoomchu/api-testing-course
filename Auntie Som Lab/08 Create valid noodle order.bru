@@ -1,0 +1,45 @@
+meta {
+  name: Create valid noodle order
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/orders
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{accessToken}}
+}
+
+body:json {
+  {"itemId":1,"quantity":1}
+}
+
+script:pre-request {
+  bru.setEnvVar("expectedStock1", Number(bru.getEnvVar("stock1")));
+  bru.setEnvVar("expectedStock2", Number(bru.getEnvVar("stock2")));
+  bru.setEnvVar("expectedStock1", Number(bru.getEnvVar("stock1")) - 1);
+}
+
+script:post-response {
+  if (res.getStatus() === 200 && res.getBody().orderId) {
+    bru.setEnvVar("orderId", res.getBody().orderId);
+  }
+}
+
+tests {
+  test("Valid order is created", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("Order has an ID and created status", function () {
+    expect(res.getBody().orderId).to.match(/^ORD-[a-f0-9]{6}$/);
+    expect(res.getBody().status).to.equal("created");
+  });
+  test("Total equals menu price times quantity", function () {
+    expect(res.getBody().totalPrice).to.equal(Number(bru.getEnvVar("price1")));
+  });
+}

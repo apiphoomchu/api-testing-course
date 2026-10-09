@@ -1,0 +1,416 @@
+{
+  "studentName": "Apiphoom Chuenchompoo",
+  "studentId": "6633280621",
+  "backendCommit": "3bd8f6a868cc5116e8095ff33ed1d54e77847500",
+  "brunoVersion": "4.2.1",
+  "pythonVersion": "3.12.13",
+  "baseUrl": "http://127.0.0.1:5050",
+  "summary": {
+    "requests": 30,
+    "checks": 51,
+    "passed": 35,
+    "failed": 16
+  },
+  "results": [
+    {
+      "file": "01 Reject wrong password.bru",
+      "httpStatus": 401,
+      "tests": [
+        {
+          "description": "Wrong password is rejected",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "02 Login and save token.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Valid login succeeds",
+          "status": "pass"
+        },
+        {
+          "description": "Login returns a token and its lifetime",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "03 Read initial menu.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Menu is public",
+          "status": "pass"
+        },
+        {
+          "description": "The run starts with the original menu and fresh stock",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "04 Reject missing token.bru",
+      "httpStatus": 401,
+      "tests": [
+        {
+          "description": "Orders require authentication",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "05 Reject invalid token.bru",
+      "httpStatus": 401,
+      "tests": [
+        {
+          "description": "Unknown token is rejected",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "06 Reject unknown item.bru",
+      "httpStatus": 404,
+      "tests": [
+        {
+          "description": "Unknown menu item is rejected",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "07 Stock unchanged after rejected orders.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Menu is available",
+          "status": "pass"
+        },
+        {
+          "description": "Stock matches the expected changes",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "08 Create valid noodle order.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Total equals menu price times quantity",
+          "status": "fail",
+          "error": "expected 45 to equal 50"
+        },
+        {
+          "description": "Valid order is created",
+          "status": "pass"
+        },
+        {
+          "description": "Order has an ID and created status",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "09 Retrieve created order.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Stored total is also correct",
+          "status": "fail",
+          "error": "expected 45 to equal 50"
+        },
+        {
+          "description": "Created order is retrievable",
+          "status": "pass"
+        },
+        {
+          "description": "Retrieved order has the saved ID and status",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "10 Stock decreases by ordered quantity.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Menu is available",
+          "status": "pass"
+        },
+        {
+          "description": "Stock matches the expected changes",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "11 Reject nonexistent order.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Missing order returns 404",
+          "status": "fail",
+          "error": "expected 200 to equal 404"
+        },
+        {
+          "description": "Missing order has an error message",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "12 Reject negative quantity.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Negative quantity returns a client error",
+          "status": "fail",
+          "error": "expected 200 to equal 400"
+        }
+      ]
+    },
+    {
+      "file": "13 Stock unchanged after negative quantity.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Stock matches the expected changes",
+          "status": "fail",
+          "error": "Stock for item 1: expected 2 to equal 1"
+        },
+        {
+          "description": "Menu is available",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "14 Reject zero quantity.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Zero quantity returns a client error",
+          "status": "fail",
+          "error": "expected 200 to equal 400"
+        }
+      ]
+    },
+    {
+      "file": "15 Stock unchanged after zero quantity.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Menu is available",
+          "status": "pass"
+        },
+        {
+          "description": "Stock matches the expected changes",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "16 Reject fractional quantity.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Fractional quantity returns a client error",
+          "status": "fail",
+          "error": "expected 200 to equal 400"
+        }
+      ]
+    },
+    {
+      "file": "17 Stock unchanged after fractional quantity.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Stock matches the expected changes",
+          "status": "fail",
+          "error": "Stock for item 1: expected 1.5 to equal 2"
+        },
+        {
+          "description": "Menu is available",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "18 Reject string quantity.bru",
+      "httpStatus": 500,
+      "tests": [
+        {
+          "description": "String quantity returns a client error",
+          "status": "fail",
+          "error": "expected 500 to equal 400"
+        }
+      ]
+    },
+    {
+      "file": "19 Stock unchanged after string quantity.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Menu is available",
+          "status": "pass"
+        },
+        {
+          "description": "Stock matches the expected changes",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "20 Reject null quantity.bru",
+      "httpStatus": 500,
+      "tests": [
+        {
+          "description": "Null quantity returns a client error",
+          "status": "fail",
+          "error": "expected 500 to equal 400"
+        }
+      ]
+    },
+    {
+      "file": "21 Stock unchanged after null quantity.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Menu is available",
+          "status": "pass"
+        },
+        {
+          "description": "Stock matches the expected changes",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "22 Reject missing quantity.bru",
+      "httpStatus": 500,
+      "tests": [
+        {
+          "description": "Missing quantity returns a client error",
+          "status": "fail",
+          "error": "expected 500 to equal 400"
+        }
+      ]
+    },
+    {
+      "file": "23 Stock unchanged after missing quantity.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Menu is available",
+          "status": "pass"
+        },
+        {
+          "description": "Stock matches the expected changes",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "24 Reject quantity above stock.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "An order exceeding available stock is rejected",
+          "status": "fail",
+          "error": "expected 200 to equal 400"
+        }
+      ]
+    },
+    {
+      "file": "25 Overselling cannot change stock.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Stock matches the expected changes",
+          "status": "fail",
+          "error": "Stock for item 1: expected -0.5 to equal 1.5"
+        },
+        {
+          "description": "Stock never becomes negative",
+          "status": "fail",
+          "error": "Tom Yum Noodles: expected -0.5 to be at least +0"
+        },
+        {
+          "description": "Menu is available",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "26 Buy exactly remaining fried rice.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Fried rice total matches the menu price",
+          "status": "fail",
+          "error": "expected 40 to equal 45"
+        },
+        {
+          "description": "Buying exactly the remaining stock succeeds",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "27 Fried rice stock reaches zero.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Menu is available",
+          "status": "pass"
+        },
+        {
+          "description": "Stock matches the expected changes",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "28 Reject sold out item.bru",
+      "httpStatus": 400,
+      "tests": [
+        {
+          "description": "Sold out item is rejected",
+          "status": "pass"
+        },
+        {
+          "description": "Sold out response explains the problem",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "29 Stock unchanged after sold out order.bru",
+      "httpStatus": 200,
+      "tests": [
+        {
+          "description": "Menu is available",
+          "status": "pass"
+        },
+        {
+          "description": "Stock matches the expected changes",
+          "status": "pass"
+        }
+      ]
+    },
+    {
+      "file": "30 Reject token without Bearer scheme.bru",
+      "httpStatus": 400,
+      "tests": [
+        {
+          "description": "Authorization must use the Bearer scheme",
+          "status": "fail",
+          "error": "expected 400 to equal 401"
+        }
+      ]
+    }
+  ]
+}

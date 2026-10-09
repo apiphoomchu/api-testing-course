@@ -1,0 +1,36 @@
+meta {
+  name: Buy exactly remaining fried rice
+  type: http
+  seq: 26
+}
+
+post {
+  url: {{baseUrl}}/orders
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{accessToken}}
+}
+
+body:json {
+  {"itemId":2,"quantity":{{riceQuantity}}}
+}
+
+script:pre-request {
+  bru.setEnvVar("expectedStock1", Number(bru.getEnvVar("stock1")));
+  bru.setEnvVar("expectedStock2", Number(bru.getEnvVar("stock2")));
+  bru.setEnvVar("riceQuantity", Number(bru.getEnvVar("stock2")));
+  bru.setEnvVar("expectedStock2", 0);
+}
+
+tests {
+  test("Buying exactly the remaining stock succeeds", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("Fried rice total matches the menu price", function () {
+    expect(res.getBody().totalPrice).to.equal(Number(bru.getEnvVar("price2")) * Number(bru.getEnvVar("riceQuantity")));
+  });
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Reject token without Bearer scheme
+  type: http
+  seq: 30
+}
+
+post {
+  url: {{baseUrl}}/orders
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: {{accessToken}}
+}
+
+body:json {
+  {"itemId":2,"quantity":1}
+}
+
+tests {
+  test("Authorization must use the Bearer scheme", function () {
+    expect(res.getStatus()).to.equal(401);
+  });
+}

@@ -1,0 +1,31 @@
+meta {
+  name: Reject null quantity
+  type: http
+  seq: 20
+}
+
+post {
+  url: {{baseUrl}}/orders
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{accessToken}}
+}
+
+body:json {
+  {"itemId":1,"quantity":null}
+}
+
+script:pre-request {
+  bru.setEnvVar("expectedStock1", Number(bru.getEnvVar("stock1")));
+  bru.setEnvVar("expectedStock2", Number(bru.getEnvVar("stock2")));
+}
+
+tests {
+  test("Null quantity returns a client error", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}

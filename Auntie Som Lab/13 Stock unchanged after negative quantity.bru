@@ -1,0 +1,35 @@
+meta {
+  name: Stock unchanged after negative quantity
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{baseUrl}}/menu
+  body: none
+  auth: none
+}
+
+script:post-response {
+  if (res.getStatus() === 200 && Array.isArray(res.getBody())) {
+    for (const item of res.getBody()) {
+      bru.setEnvVar("stock" + item.id, item.stock);
+      bru.setEnvVar("price" + item.id, item.price);
+    }
+  }
+}
+
+tests {
+  test("Menu is available", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("Stock matches the expected changes", function () {
+    const menu = res.getBody();
+    expect(menu).to.be.an("array");
+    for (const id of [1, 2]) {
+      const item = menu.find(item => item.id === id);
+      expect(item, "Item " + id).to.exist;
+      expect(item.stock, "Stock for item " + id).to.equal(Number(bru.getEnvVar("expectedStock" + id)));
+    }
+  });
+}

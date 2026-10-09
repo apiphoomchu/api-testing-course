@@ -1,0 +1,31 @@
+meta {
+  name: Reject zero quantity
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{baseUrl}}/orders
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Bearer {{accessToken}}
+}
+
+body:json {
+  {"itemId":1,"quantity":0}
+}
+
+script:pre-request {
+  bru.setEnvVar("expectedStock1", Number(bru.getEnvVar("stock1")));
+  bru.setEnvVar("expectedStock2", Number(bru.getEnvVar("stock2")));
+}
+
+tests {
+  test("Zero quantity returns a client error", function () {
+    expect(res.getStatus()).to.equal(400);
+  });
+}
